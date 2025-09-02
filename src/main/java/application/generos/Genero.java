@@ -1,33 +1,32 @@
 package application.generos;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@Entity
+@Table(name = "generos")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Genero {
 
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(unique = true, nullable = false)
     private String nome;
 
-
-    public Genero() {
+    public Genero(GeneroDTO dados) {
+        this.setId(dados.id());
+        this.setNome(dados.nome());
     }
 
-    public Genero(Long id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
-    // Getters e Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
+    public Genero(GeneroInsertDTO dados) {
+        this.setNome(dados.nome());
     }
 }

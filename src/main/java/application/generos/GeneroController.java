@@ -3,40 +3,35 @@ package application.generos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/generos")
 public class GeneroController {
 
     @Autowired
-    private GeneroRepository repository;
+    private GeneroService generoService;
 
     @GetMapping
-    public List<Genero> listarTodos() {
-        return repository.findAll();
-    }
-
-    @PostMapping
-    public Genero criarGenero(@RequestBody Genero genero) {
-        return repository.save(genero);
+    public Iterable<GeneroDTO> getAll() {
+        return generoService.getAll();
     }
 
     @GetMapping("/{id}")
-    public Genero buscarPorId(@PathVariable Long id) {
-        return repository.findById(id).orElse(null);
+    public GeneroDTO getOne(@PathVariable long id) {
+        return generoService.getOne(id);
+    }
+
+    @PostMapping
+    public GeneroDTO insert(@RequestBody GeneroInsertDTO dados) {
+        return generoService.insert(dados);
     }
 
     @PutMapping("/{id}")
-    public Genero atualizarGenero(@PathVariable Long id, @RequestBody Genero generoAtualizado) {
-        return repository.findById(id).map(genero -> {
-            genero.setNome(generoAtualizado.getNome());
-            return repository.save(genero);
-        }).orElse(null);
+    public GeneroDTO update(@PathVariable long id, @RequestBody GeneroInsertDTO novosDados) {
+        return generoService.update(id, novosDados);
     }
 
     @DeleteMapping("/{id}")
-    public void deletarGenero(@PathVariable Long id) {
-        repository.deleteById(id);
+    public void remove(@PathVariable long id) {
+        generoService.delete(id);
     }
 }
